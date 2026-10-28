@@ -23,4 +23,30 @@ rq.skilllist.on_page(function(ctx)
   return nextp
 end)
 
+local logged_buttons = false
+rq.skilllist.on_buttons(function(prev, next)
+  if prev and prev > 0 then
+    rq.agent.control("skill-page-prev", {
+      label = "Previous Page",
+      button = prev,
+    })
+  else
+    rq.agent.control("skill-page-prev")
+  end
+  if next and next > 0 then
+    rq.agent.control("skill-page-next", {
+      label = "Next Page",
+      button = next,
+    })
+  else
+    rq.agent.control("skill-page-next")
+  end
+  if not logged_buttons then
+    logged_buttons = true
+    rq.log(string.format(
+      "potential-skill-pages: buttons prev=%s next=%s",
+      tostring(prev), tostring(next)))
+  end
+end)
+
 rq.log("potential-skill-pages: page 1 on open; deny past either end")
