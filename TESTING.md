@@ -1,6 +1,6 @@
-# Potential skill pages — agent notes
+# Testing Potential Skill Pages
 
-This file is optional. It is read only because this mod is installed. If this file is missing, or `skill-page-prev` / `skill-page-next` are not in `rqmod-ctl ui`, the page buttons are not there. Do not assume them.
+For people and agents who test the mod in the game. Read it before you use anything the mod adds. If this file is missing, or `skill-page-prev` / `skill-page-next` are not in `rqmod-ctl ui`, the page buttons are not there. Do not assume them.
 
 ## When the menu exists
 
@@ -15,7 +15,7 @@ A grey arrow is still listed, with `enabled` false. A grey click is the game’s
 | `skill-page-prev` | Previous Page | one page toward page 1 |
 | `skill-page-next` | Next Page | one page toward the last page |
 
-Registered from `rq.skilllist.on_buttons` via `rq.agent.control`. The numeric button handle is whatever `on_buttons` passes; it is not a fixed constant in this file.
+Registered from `rq.skilllist.on_buttons` via `rq.agent.control`. The numeric button handle is whatever `on_buttons` passes; it is not a fixed constant in the mod.
 
 ## Layout
 
@@ -32,3 +32,14 @@ Registered from `rq.skilllist.on_buttons` via `rq.agent.control`. The numeric bu
 ## Wichita
 
 Spellblade Knowledge is skill **960**. On Wichita it is registered after the first 36 unowned offers, so it is on **page 2** when page 1 is full. Press `skill-page-next`, then buy the `offer-N` whose `value` is `960`.
+
+## When you change the mod
+
+Keep this file in step with `init.lua`, not with memory or the game's code:
+
+- The ids come from `rq.skilllist.on_buttons`, which logs the two button handles once
+  (`potential-skill-pages: buttons prev=... next=...`).
+- `on_page` returns `false` to grey an arrow when the next page would be below 1 or past
+  `ctx.pages`, and a page number to move. `on_open` goes back to page 1.
+- The page length (36) is the engine's (`rq.skilllist`). `y` is not in the Lua: read it from the
+  `skill-page-prev` row of `rqmod-ctl ui` with the window open.

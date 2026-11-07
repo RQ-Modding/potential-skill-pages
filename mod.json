@@ -1,4 +1,5 @@
 {
+  "$schema": "https://rq-modding.github.io/rq-modding-docs/schemas/mod.schema.json",
   "id": "potential-skill-pages",
   "name": "Potential Skill Pages",
   "author": "Magnum Mods",
