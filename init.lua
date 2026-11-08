@@ -1,5 +1,5 @@
 -- Potential skill pages. 36 skills per page on the Potential Skills grid.
--- C keeps the buy list (144 rows) and cuts each page's 36. Lua owns the page,
+-- The engine keeps the buy list (144 rows) and cuts each page's 36. The mod owns the page,
 -- and Previous Page / Next Page are rq.gamebutton entries on the skill window (loader 2.17.0).
 
 rq.log("potential-skill-pages: loading")
