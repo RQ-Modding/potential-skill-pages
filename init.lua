@@ -1,14 +1,14 @@
 -- Potential skill pages. 36 skills per page on the Potential Skills grid.
--- C keeps the buy list and draws Previous Page / Next Page.
--- Lua owns the page index and whether a click moves.
+-- C keeps the buy list (144 rows) and cuts each page's 36. Lua owns the page,
+-- and Previous Page / Next Page are rq.gamebutton entries on the skill window (loader 2.17.0).
 
 rq.log("potential-skill-pages: loading")
 
-if not rq.skilllist or not rq.skilllist.install then
-  error("potential-skill-pages: rq.skilllist missing (engine too old)")
+if not rq.skilllist or not rq.skilllist.install or not rq.gamebutton then
+  error("potential-skill-pages: rq.skilllist or rq.gamebutton missing (engine too old)")
 end
 
-if not rq.skilllist.install() then
+if not rq.skilllist.install({ buttons = false }) then
   error("potential-skill-pages: install failed")
 end
 
@@ -16,37 +16,49 @@ rq.skilllist.on_open(function()
   rq.skilllist.set_page(1)
 end)
 
+-- The page next to this one, or nil past either end.
+local function step(dir)
+  local p = rq.skilllist.page() + dir
+  if p < 1 or p > rq.skilllist.page_count() then return nil end
+  return p
+end
+
 rq.skilllist.on_page(function(ctx)
   if ctx.dir == 0 then return ctx.page end
-  local nextp = ctx.page + ctx.dir
-  if nextp < 1 or nextp > ctx.pages then return false end
-  return nextp
+  return step(ctx.dir) or false
 end)
 
-local logged_buttons = false
-rq.skilllist.on_buttons(function(prev, next)
-  if prev and prev > 0 then
-    rq.agent.control("skill-page-prev", {
-      label = "Previous Page",
-      button = prev,
-    })
-  else
-    rq.agent.control("skill-page-prev")
-  end
-  if next and next > 0 then
-    rq.agent.control("skill-page-next", {
-      label = "Next Page",
-      button = next,
-    })
-  else
-    rq.agent.control("skill-page-next")
-  end
-  if not logged_buttons then
-    logged_buttons = true
-    rq.log(string.format(
-      "potential-skill-pages: buttons prev=%s next=%s",
-      tostring(prev), tostring(next)))
-  end
-end)
+local function tip()
+  return string.format("Page %d of %d", rq.skilllist.page(), rq.skilllist.page_count())
+end
 
-rq.log("potential-skill-pages: page 1 on open; deny past either end")
+local function go(dir)
+  local p = step(dir)
+  if not p then return end
+  rq.skilllist.set_page(p)
+  rq.skilllist.refresh()
+end
+
+local prev, next
+prev = rq.gamebutton.add({
+  group = "skill-window",
+  id = "prev",
+  label = "Previous Page",
+  enabled = function()
+    prev.set({ tip = tip() })
+    return step(-1) ~= nil
+  end,
+  on_click = function() go(-1) end,
+})
+next = rq.gamebutton.add({
+  group = "skill-window",
+  id = "next",
+  label = "Next Page",
+  enabled = function()
+    next.set({ tip = tip() })
+    return step(1) ~= nil
+  end,
+  on_click = function() go(1) end,
+})
+
+rq.log("potential-skill-pages: page 1 on open; Previous / Next on the skill window")
