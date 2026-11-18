@@ -2,6 +2,20 @@
 
 Pages for the **Potential Skills** list, so you can buy skills past the first 36.
 
+## Showcase
+
+### Kaoru Quincy with her QoL mod having too many skills
+
+<img width="1180" height="842" alt="image" src="https://github.com/user-attachments/assets/fc7695dd-8470-4bcf-9af5-c9bb84c43683" />
+
+### Second Page of her Potential Skills
+
+<img width="1187" height="851" alt="image" src="https://github.com/user-attachments/assets/10aa01f3-6ecb-479f-9b26-44c48e44b9b3" />
+
+### The page switch buttons
+
+<img width="722" height="164" alt="20261118-1348-55 9785189" src="https://github.com/user-attachments/assets/2b480d3d-a07c-4ecd-a63c-d13691112361" />
+
 ## What it changes
 
 - The game shows only the first 36 skills a character can buy, and cuts the rest. With this mod the
